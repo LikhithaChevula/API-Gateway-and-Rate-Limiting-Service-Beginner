@@ -1,0 +1,104 @@
+
+API Gateway = main entry 
+/hello = a specific entry point 
+Hello from Service = message inside that entry point
+
+# When You Run the Program
+
+Command:
+python gateway.py
+
+Output in Terminal:
+API Gateway running at http://localhost:8080
+(Here my local Host is 8080)
+
+This comes from:
+print("API Gateway running at http://localhost:8080")
+
+It means:
+>>>The server started successfully
+>>>It is listening for requests
+>>>It is waiting (nothing else will print yet)
+
+# When You Open the Browser (First Request)
+
+URL you type:
+http://localhost:8080/hello
+
+What the Browser Displays:
+Hello from Service
+
+# Step-by-Step Output Flow
+
+Step 1: Browser sends request
+The browser sends a GET request to:
+/hello
+
+Step 2: Server receives request
+The Python server:
+Accepts the request
+Automatically calls:
+do_GET()
+
+Step 3: Path is checked
+self.path == "/hello"
+This is true
+
+Step 4: Success response is prepared
+self.send_response(200)
+This tells the browser:
+“Request successful”
+
+Step 5: Headers are closed
+self.end_headers()
+Now the server can send data.
+
+Step 6: Message is sent
+self.wfile.write(b"Hello from Service")
+This sends the actual output.
+
+Step 7: Browser shows output
+The browser receives the message and displays:
+Hello from Service
+
+# What Happens After Multiple Requests
+
+If you refresh or request too fast:
+Browser Output:
+Too Many Requests
+
+>>>Why this output appears
+The rate limiter checks:
+if not rate_limiter.allow_request(user_ip):
+
+If request count > limit:
+
+self.send_response(429)
+429 means:
+“Slow down, you sent too many requests”
+
+# What If You Visit / Instead?
+URL:
+http://localhost:8080/
+
+Output:
+Welcome to API Gateway
+
+# Why?
+Because of:
+if self.path == "/":
+
+# What If You Visit an Unknown Path?
+URL:
+http://localhost:8080/likhitha
+
+Output:
+404
+(or blank page depending on browser)
+
+# Why?
+Because no path matched:
+else:
+    self.send_response(404)
+
+# The output depends on which URL path you request and whether the rate limit allows it.
